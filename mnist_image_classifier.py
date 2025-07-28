@@ -102,9 +102,10 @@ def classifier():
     #    plt.yticks([])
     # fig.savefig(fname="out.png")
 
-    network = Net()
-    if torch.cuda.is_available():
-        network.cuda()
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f"Using device: {device}")
+    network = Net().to(device)
+
     optimizer = optim.SGD(network.parameters(), lr=learning_rate, momentum=momentum)
 
     train_losses = []
@@ -115,6 +116,8 @@ def classifier():
     def train(epoch: int):
         network.train()
         for batch_idx, (data, target) in enumerate(train_loader):
+            data, target = data.to(device), target.to(device)
+
             optimizer.zero_grad()
             output = network(data)
             loss = F.nll_loss(output, target)
@@ -143,6 +146,8 @@ def classifier():
         correct = 0
         with torch.no_grad():
             for data, target in test_loader:
+                data, target = data.to(device), target.to(device)
+
                 output = network(data)
                 test_loss += F.nll_loss(output, target, size_average=False).item()
                 pred = output.data.max(1, keepdim=True)[1]

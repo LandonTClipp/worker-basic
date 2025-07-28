@@ -24,6 +24,8 @@ docker build -t $IMAGE_NAME:$VERSION --platform linux/amd64 .
 docker build -t $IMAGE_NAME:latest --platform linux/amd64 .
 
 if [ "$PUSH" = true ]; then
+    git tag $VERSION
+    git push origin --tags
     docker push $IMAGE_NAME:$VERSION
     docker push $IMAGE_NAME:latest
 fi
