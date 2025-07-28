@@ -16,7 +16,7 @@ learning_rate = 0.01
 momentum = 0.5
 log_interval = 10
 
-RESULTS_DIR = "./results"
+RESULTS_DIR = "/runpod-volume/"
 
 random_seed = 1
 torch.backends.cudnn.enabled = False
