@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: serverless-test-deployment
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: serverless-test
+  template:
+    metadata:
+      labels:
+        app: serverless-test
+    spec:
+      containers:
+        - name: serverless-test
+          image: landontclipp/serverless-test:v1.0.6
+          imagePullPolicy: Always
+          command: ["python3", "-u", "mnist_image_classifier.py"]
+          volumeMounts:
+            - name: model-output
+              mountPath: /output
+      restartPolicy: Always
+      volumes:
+        - name: model-output
+          persistentVolumeClaim:
+            claimName: model-output
